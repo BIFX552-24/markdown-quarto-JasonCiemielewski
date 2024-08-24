@@ -1,7 +1,15 @@
 ---
-title: "blank"
-format: html
+title: "BIFX552-24 Learning R on iris"
+author: "Jason Ciemielewski" 
+date: "08/20/2024"
+format: 
+  html:
+    code-fold: true
+    code-summary: "Show the code"
 editor: visual
+theme: 
+  light: flatly
+  dark: darkly
 ---
 
 This assignment uses material directly taken from rpubs.com with some modifications for learning purposes.
