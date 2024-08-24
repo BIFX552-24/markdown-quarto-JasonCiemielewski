@@ -1,20 +1,30 @@
 ---
-title: "blank"
-format: html
+title: "BIFX552-24 Learning R on iris"
+author: "Jason Ciemielewski" 
+date: "08/20/2024"
+format: 
+  html:
+    code-fold: true
+    code-summary: "Show the code"
 editor: visual
+theme: 
+  light: flatly
+  dark: darkly
 ---
 
-This assignment uses material directly taken from rpubs.com with some modifications for learning purposes.
+This exercise is a replication, with some modifcations for learning purposes, of Stephen Malefetsane Moerane's 'Learning R on iris' https://rpubs.com/moeransm/intro-iris
 
-## **Introduction**
+## Introduction
 
-Numerous guides have been written on the exploration of this widely known dataset. Iris, introduced by Ronald Fisher in his 1936 paper *The use of multiple measurements in taxonomic problems*, contains three plant species (setosa, virginica, versicolor) and four features measured for each sample. These quantify the morphologic variation of the iris flower in its three species, all measurements given in centimeters.
+Numerous guides have been written on the exploration of this widely known dataset. Iris, introduced by Ronald Fisher in his 1936 paper The use of multiple measurements in taxonomic problems, contains three plant species (setosa, virginica, versicolor) and four features measured for each sample. These quantify the morphologic variation of the iris flower in its three species, all measurements given in centimeters.
 
-Any comments within our code have to be preceded by the pound sign to notify the compiler to ignore them. `# comments appear like this in code`
+Any comments within our code have to be preceded by the pound sign to notify the compiler to ignore them.
 
-### **Load the iris dataset**
+```{r}
+# comments appear like this in code
+```
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+## Load the iris dataset
 
 ```{r}
 # The datasets package needs to be loaded to access our data 
@@ -24,41 +34,41 @@ data(iris)
 summary(iris)
 ```
 
-The `summary()` function gives summary statistics for any dataset. It can also be called on one variable instead of on the whole dataset. Try `summary(iris$Sepal.Length)` and compare that with the above summaries.
+::: callout-note
+The summary() function gives summary statistics for any dataset.
+:::
 
-Alternatively, you may only want to know the column names of your dataset, in which case you can use `names(NameOfdataset)`, which in our case would look like `names(iris)`. Also notice that each coloumn name in the `iris` dataset has some upper case letters, which might be inconvenient to work with. You can then call the `tolower()` function on `names(iris)` to make this change. For those who might prefer upper case column names, the `toupper()` function will instead, be useful.
+It can also be called on one variable instead of on the whole dataset. Try summary(iris\$Sepal.Length) and compare that with the above summaries.
 
-Written packages make it easier to work with datasets than regular baseR functions. They have been optimized to be faster and more intuitive than baseR functions, therefore reducing the steepness of the R learning curve. Let's take a look;
+Alternatively, you may only want to know the column names of your dataset, in which case you can use names(NameOfdataset), which in our case would look like names(iris). Also notice that each coloumn name in the iris dataset has some upper case letters, which might be inconvenient to work with. You can then call the tolower() function on names(iris) to make this change. For those who might prefer upper case column names, the toupper() function will instead, be useful.
 
-## **The dplyr package**
+Written packages make it easier to work with datasets than regular baseR functions. They have been optimized to be faster and more intuitive than baseR functions, therefore reducing the steepness of the R learning curve. Let’s take a look;
 
-Use `install.packages("dplyr")` in your console to install this package. Note that you must be connected to the internet. If you've opened a new R script file, you will need to use the keys CTRL+Enter \[PC\] or Cmd+Enter \[Mac\] to run the commands.
+## The dplyr package
+
+Use install.packages("dplyr") in your console to install this package. Note that you must be connected to the internet. If you’ve opened a new R script file, you will need to use the keys CTRL+Enter \[PC\] or Cmd+Enter \[Mac\] to run the commands.
 
 ### filter()
 
 ```{r}
 names(iris) <- tolower(names(iris))
 library(dplyr)
-
 ```
 
 ```{r}
 # filter() the data for species virginica
 virginica <- filter(iris, species == "virginica")
-# this displays the first six rows
-head(virginica) 
-
+head(virginica) # This dispalys the first six rows
 ```
 
-Notice that we use the `logical` double equal sign as in `species == "virginica"`, and quotations around `virginica` since this value is of a `char` (character) data type. The equivalent `base` command for `filter()` would be `subset()`, with all the inner arguments being exactly the same. We can also filter for multiple conditions within our function.
+Notice that we use the logical double equal sign as in species == "virginica", and quotations around virginica since this value is of a char (character) data type. The equivalent base command for filter() would be subset(), with all the inner arguments being exactly the same. We can also filter for multiple conditions within our function.
 
 ```{r}
 sepalLength6 <- filter(iris, species == "virginica", sepal.length > 6)
-tail(sepalLength6) 
-# compare this to head()
+tail(sepalLength6) # compare this to head()
 ```
 
-The syntax for using `subset()` would be `subset(iris, species == "virginica" & sepal.length > 6)` and using `<-` to assign it to a variable of your choice, which in our case is `sepalLength6`
+The syntax for using subset() would be subset(iris, species == "virginica" & sepal.length \> 6) and using \<- to assign it to a variable of your choice, which in our case is sepalLength6
 
 ### select()
 
@@ -87,7 +97,14 @@ newCol <- mutate(iris, greater.half = sepal.width > 0.5 * sepal.length)
 tail(newCol)
 ```
 
-Challenge: Out of the 150 flowers, find how many satisfy this condition. Hint: use the `sum()` function on `newCol$greater.half`
+Challenge: Out of the 150 flowers, find how many satisfy this condition. Hint: use the `sum()` function on `newCol$greater.half`
+
+```{r}
+challenge_1_answer <- sum(newCol$greater.half)
+print("Answer =")
+print(challenge_1_answer)
+
+```
 
 ### Other functions
 
@@ -98,12 +115,11 @@ head(newCol)
 ```
 
 ```{r}
-# The chain operator, or the pipeline %>%
-# This will first filter, and then arrange our data. Note that here the order in which you call functions does not matter, but in other cases it might
+# The chain operator, or the pipline %>%
+# This will first filter, and then arrange our data.  Note that here the order in which you call the functions does not matter, but in other cases it might
 arr.virg <- newCol %>% filter(species == "virginica") %>%
   arrange(sepal.width)
-arr.virg[30:35,] 
-# will show us rows 30 through 35 and all columns
+arr.virg[30:35,] # will show us rows 30 through 35 and all columns
 ```
 
 ```{r}
@@ -113,32 +129,48 @@ arr.virg[30:35,]
 summarise(arr.virg, mean.length = mean(sepal.length, na.rm = TRUE))
 ```
 
-This is the mean sepal.length for the virginica species. Challenge2: The standard deviation gives how much individual values vary from the mean. Find the standard deviation of sepal.length using `summarise()` and `sd()`
-
-Visualization
-
-Any powerful analysis will visualize the data to give a better picture (*wink wink*) of the data. Below is a general plot of the iris dataset:
+This is the mean sepal.length for the virginica species. Challenge2: The standard deviation gives how much individual values vary from the mean. Find the standard deviation of sepal.length using summarise() and sd()
 
 ```{r}
+sl_virg <- newCol %>% filter(species == "virginica") %>%
+  select(sepal.length) 
+print("Standard deviation in virginica sepal length (cm) is")
+sd(sl_virg$sepal.length)
+summarise(sl_virg, standard.deviation = sd(sl_virg$sepal.length))
+```
+
+## Visualization
+
+Any powerful analysis will visualize the data to give a better picture (wink wink) of the data. Below is a general plot of the iris dataset:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
 plot(iris)
 ```
 
-looking to plot specific variables, we can use `plot(x,y)` where `x` and `y` are the variables we're interested in. `hist()` is another useful function
+If we’re looking to plot specific variables, we can use plot(x,y) where x and y are the variables we’re interested in. hist() is another useful function
 
 ```{r}
 # use ?plot to read more about other arguments
+#| code-fold: true
+#| code-summary: "Show the code"
 plot(iris$sepal.width, iris$sepal.length)
 ```
 
+Notice that in flowers with greater sepal widths tend to have shorter sepal lengths.
+
 ```{r}
 # ?hist will give you details on more arguments
+#| code-fold: true
+#| code-summary: "Show the code"
 hist(iris$sepal.width)
 ```
 
-in flowers with greater sepal widths tend to have shorter sepal lengths.
-
 For more resources on R, visit:
 
--   <http://www.cyclismo.org/tutorial/R/>
-
--   <http://www.tutprialspoint.com/r>
+```         
+http://www.cyclismo.org/tutorial/R/
+http://www.tutprialspoint.com/r
+http://had.co.nz
+```
